@@ -11,7 +11,7 @@ A modern short-form vertical video platform for sharing your best pup moments, b
 - **State Management:** Zustand
 - **Animations:** Framer Motion
 - **Icons:** Lucide React
-- **Backend:** Supabase (to be configured)
+- **Backend:** Supabase (Authentication, Database, Storage, Realtime)
 
 ## Getting Started
 
@@ -74,10 +74,20 @@ src/
 │   └── globals.css        # Global styles and CSS variables
 ├── components/
 │   ├── ui/                # Shadcn UI components
-│   └── providers/         # Global context providers
+│   └── providers/         # Global context providers (Supabase, Theme, Toast)
 ├── lib/
+│   ├── api/               # Typed API layer for Supabase operations
+│   │   ├── videos.ts      # Video CRUD operations
+│   │   ├── interactions.ts # Likes and comments
+│   │   └── profiles.ts    # User profile operations
+│   ├── supabase/          # Supabase client configuration
+│   │   ├── browser-client.ts  # Client-side Supabase client
+│   │   ├── server-client.ts   # Server-side Supabase client
+│   │   ├── session.ts         # Session management helpers
+│   │   └── realtime.ts        # Realtime subscription utilities
 │   └── utils.ts           # Utility functions
-├── types/                 # TypeScript type definitions
+├── types/
+│   └── supabase.ts        # Generated Supabase database types
 └── hooks/                 # Custom React hooks
 ```
 
@@ -86,11 +96,15 @@ src/
 - ✅ Next.js 14 App Router setup with TypeScript
 - ✅ Tailwind CSS v4 with custom design tokens for vertical video UI
 - ✅ Shadcn UI components (Button, Input, Textarea, Avatar, Dialog, Sheet, Skeleton, Sonner, DropdownMenu, ScrollArea)
-- ✅ Global Providers component with Toaster
+- ✅ Global Providers component with Toaster and Supabase
 - ✅ Route structure: `/` (feed), `/upload`, `/auth`
 - ✅ Custom fonts (Inter)
 - ✅ Linting and formatting setup (ESLint + Prettier)
 - ✅ Environment variables template
+- ✅ Supabase integration with client/server helpers
+- ✅ Session management and middleware for auth persistence
+- ✅ Typed API layer for videos, interactions, and profiles
+- ✅ Realtime subscription utilities for live updates
 
 ## Custom Vertical Video Utilities
 
@@ -108,8 +122,69 @@ The project includes custom Tailwind utilities optimized for vertical video UI p
 Required environment variables (see `.env.example`):
 
 - `NEXT_PUBLIC_SUPABASE_URL` - Your Supabase project URL
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Your Supabase anonymous key
-- `SUPABASE_SERVICE_ROLE_KEY` - (Optional) Service role key for server-side operations
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Your Supabase anonymous key (safe for client-side use)
+- `SUPABASE_SERVICE_ROLE_KEY` - (Optional) Service role key for server-side admin operations
+
+### Security Guidelines for Environment Variables
+
+**IMPORTANT:** The service role key has full admin privileges to your Supabase database.
+
+- ✅ **DO** use it only in server-side code (API routes, server components, server actions)
+- ✅ **DO** keep it secure in `.env.local` (never commit to version control)
+- ✅ **DO** use environment variables in production (Vercel, etc.)
+- ❌ **DON'T** expose it to the client or browser
+- ❌ **DON'T** use it in client components or browser-side code
+- ❌ **DON'T** commit it to Git or share it publicly
+
+For most operations, use the anonymous key (`NEXT_PUBLIC_SUPABASE_ANON_KEY`) which respects Row Level Security (RLS) policies.
+
+## Supabase Setup
+
+### Generating Types
+
+To generate TypeScript types from your Supabase schema:
+
+```bash
+npx supabase gen types typescript --project-id your-project-id > src/types/supabase.ts
+```
+
+Or if using local development:
+
+```bash
+npx supabase gen types typescript --local > src/types/supabase.ts
+```
+
+### API Layer Usage
+
+The project includes a typed API layer for interacting with Supabase:
+
+```typescript
+// Client-side usage
+import { fetchVideos, toggleVideoLike } from "@/lib/api";
+
+const videos = await fetchVideos({ limit: 10 });
+const { liked } = await toggleVideoLike(userId, videoId);
+```
+
+### Realtime Subscriptions
+
+Use the realtime utilities for live updates:
+
+```typescript
+import { createRealtimeSubscription } from "@/lib/supabase";
+
+const channel = createRealtimeSubscription({
+  table: "likes",
+  event: "INSERT",
+  filter: `video_id=eq.${videoId}`,
+  onEvent: (payload) => {
+    console.log("New like:", payload);
+  },
+});
+
+// Cleanup when component unmounts
+unsubscribeRealtimeChannel(channel);
+```
 
 ## Next Steps
 
