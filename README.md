@@ -11,7 +11,8 @@ A modern short-form vertical video platform for sharing your best pup moments, b
 - **State Management:** Zustand
 - **Animations:** Framer Motion
 - **Icons:** Lucide React
-- **Backend:** Supabase (to be configured)
+- **Backend:** Supabase (PostgreSQL database with Row Level Security)
+- **Database:** PostgreSQL with automated migrations
 
 ## Getting Started
 
@@ -19,6 +20,8 @@ A modern short-form vertical video platform for sharing your best pup moments, b
 
 - Node.js 18.x or higher
 - npm or yarn
+- Docker (for local Supabase development)
+- Supabase CLI (install with `npm install -g supabase` or `brew install supabase/tap/supabase`)
 
 ### Installation
 
@@ -28,18 +31,39 @@ A modern short-form vertical video platform for sharing your best pup moments, b
 npm install
 ```
 
-2. Copy the environment variables template:
+2. Set up Supabase locally:
+
+```bash
+# Start local Supabase instance (PostgreSQL, Auth, Storage, etc.)
+supabase start
+```
+
+This will start a local Supabase instance and automatically apply all migrations. Note the output - it provides your local API URL and keys.
+
+3. Copy the environment variables template:
 
 ```bash
 cp .env.example .env.local
 ```
 
-3. Configure your environment variables in `.env.local`:
+4. Configure your environment variables in `.env.local` with the credentials from `supabase start`:
 
 ```env
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+NEXT_PUBLIC_SUPABASE_URL=http://localhost:54321
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_local_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_local_service_role_key
 ```
+
+5. Create the videos storage bucket:
+
+The migrations create the database schema automatically. To set up the storage bucket for videos, you can either:
+
+- Use the Supabase Studio (opens at http://localhost:54323 when running locally):
+  - Navigate to Storage
+  - Create a new bucket named "videos"
+  - Make it public
+
+- Or run the SQL commands in `supabase/README.md` in the SQL editor
 
 ### Development
 
@@ -50,6 +74,33 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+
+### Supabase Commands
+
+```bash
+# Start local Supabase (includes PostgreSQL, Auth, Storage)
+supabase start
+
+# Stop local Supabase
+supabase stop
+
+# View Supabase status and credentials
+supabase status
+
+# Open Supabase Studio (local dashboard)
+open http://localhost:54323
+
+# Reset database (reapply all migrations)
+supabase db reset
+
+# Create a new migration
+supabase migration new migration_name
+
+# Generate TypeScript types from database
+supabase gen types typescript --local > src/types/database.ts
+```
+
+For more details on the database schema, RLS policies, and production setup, see [supabase/README.md](./supabase/README.md).
 
 ### Available Scripts
 
@@ -77,8 +128,18 @@ src/
 │   └── providers/         # Global context providers
 ├── lib/
 │   └── utils.ts           # Utility functions
-├── types/                 # TypeScript type definitions
+├── types/
+│   ├── database.ts        # Supabase database TypeScript types
+│   └── index.ts           # General type definitions
 └── hooks/                 # Custom React hooks
+
+supabase/
+├── migrations/            # SQL migration files (timestamped)
+│   ├── 20240101000000_initial_schema.sql
+│   ├── 20240101000001_aggregate_triggers.sql
+│   ├── 20240101000002_rls_policies.sql
+│   └── 20240101000003_helper_functions.sql
+└── README.md             # Supabase setup and schema documentation
 ```
 
 ## Features (Current State)
@@ -91,6 +152,10 @@ src/
 - ✅ Custom fonts (Inter)
 - ✅ Linting and formatting setup (ESLint + Prettier)
 - ✅ Environment variables template
+- ✅ Supabase database schema with migrations
+- ✅ Row Level Security (RLS) policies
+- ✅ TypeScript database types
+- ✅ Automated aggregate count triggers
 
 ## Custom Vertical Video Utilities
 
@@ -103,6 +168,30 @@ The project includes custom Tailwind utilities optimized for vertical video UI p
 - `.snap-vertical` - Vertical scroll snapping
 - `.snap-center` - Center scroll snap alignment
 
+## Database Schema
+
+The application uses Supabase (PostgreSQL) with the following tables:
+
+- **profiles** - User profiles linked to Supabase Auth
+- **videos** - Video content with metadata
+- **likes** - User likes on videos
+- **comments** - User comments on videos
+
+All tables have Row Level Security (RLS) enabled with policies that:
+
+- Allow authenticated users to read all public content
+- Allow users to create/update/delete their own content
+- Maintain data integrity with foreign key constraints
+
+The database includes:
+
+- Automated triggers to maintain `like_count` and `comment_count` on videos
+- Indexes optimized for feed queries and interactions
+- A trigger to auto-create profiles when users sign up
+- Helper functions and views for common queries
+
+See [supabase/README.md](./supabase/README.md) for complete schema documentation.
+
 ## Environment Variables
 
 Required environment variables (see `.env.example`):
@@ -113,10 +202,10 @@ Required environment variables (see `.env.example`):
 
 ## Next Steps
 
-- Configure Supabase authentication
-- Implement video upload functionality
-- Build the video feed with vertical scroll
-- Add user profiles and interactions
+- Implement Supabase authentication hooks
+- Build video upload functionality with Supabase Storage
+- Create the video feed with vertical scroll
+- Add user profile pages and interactions
 - Implement video playback with controls
 
 ## Contributing
