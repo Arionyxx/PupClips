@@ -38,7 +38,12 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   // Protected routes - redirect to auth if not authenticated
-  if (!user && request.nextUrl.pathname.startsWith("/upload")) {
+  const protectedRoutes = ["/upload", "/profile/edit"];
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    request.nextUrl.pathname.startsWith(route)
+  );
+
+  if (!user && isProtectedRoute) {
     const url = request.nextUrl.clone();
     url.pathname = "/auth";
     return NextResponse.redirect(url);

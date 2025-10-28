@@ -1,4 +1,4 @@
-import type { Tables, Inserts } from "@/types/supabase";
+import type { Tables, Inserts } from "@/types/database";
 import { createClient } from "@/lib/supabase/browser-client";
 import { createClient as createServerClient } from "@/lib/supabase/server-client";
 

@@ -2,7 +2,7 @@ import { UploadCloud } from "lucide-react";
 
 export default function UploadPage() {
   return (
-    <main className="bg-background flex min-h-screen flex-col items-center justify-center p-8">
+    <main className="bg-background flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8">
       <div className="w-full max-w-2xl space-y-6">
         <div className="space-y-2 text-center">
           <h1 className="text-3xl font-bold tracking-tight">Upload Video</h1>

@@ -30,6 +30,7 @@ export {
   DropdownMenuRadioGroup,
 } from "./dropdown-menu";
 export { Input } from "./input";
+export { Label } from "./label";
 export { ScrollArea, ScrollBar } from "./scroll-area";
 export {
   Sheet,
@@ -43,4 +44,5 @@ export {
 } from "./sheet";
 export { Skeleton } from "./skeleton";
 export { Toaster } from "./sonner";
+export { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
 export { Textarea } from "./textarea";
