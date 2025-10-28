@@ -2,7 +2,7 @@ import type {
   RealtimeChannel,
   RealtimePostgresChangesPayload,
 } from "@supabase/supabase-js";
-import type { Database } from "@/types/supabase";
+import type { Database } from "@/types/database";
 import { createClient } from "./browser-client";
 
 type Tables = Database["public"]["Tables"];

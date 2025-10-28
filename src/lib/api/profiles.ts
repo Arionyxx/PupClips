@@ -1,4 +1,4 @@
-import type { Tables, Updates } from "@/types/supabase";
+import type { Tables, Updates } from "@/types/database";
 import { createClient } from "@/lib/supabase/browser-client";
 import { createClient as createServerClient } from "@/lib/supabase/server-client";
 
@@ -71,7 +71,7 @@ export async function updateProfile(
     throw error;
   }
 
-  return data;
+  return data as unknown as Profile;
 }
 
 /**
@@ -81,7 +81,7 @@ export async function updateProfile(
 export async function createProfile(profile: {
   id: string;
   username: string;
-  full_name?: string;
+  display_name?: string;
   avatar_url?: string;
   bio?: string;
 }): Promise<Profile> {
@@ -89,7 +89,7 @@ export async function createProfile(profile: {
 
   const { data, error } = await supabase
     .from("profiles")
-    .insert(profile)
+    .insert(profile as any)
     .select()
     .single();
 
@@ -98,5 +98,5 @@ export async function createProfile(profile: {
     throw error;
   }
 
-  return data;
+  return data as unknown as Profile;
 }
