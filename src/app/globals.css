@@ -146,4 +146,18 @@
   .snap-center {
     scroll-snap-align: center;
   }
+
+  .snap-start {
+    scroll-snap-align: start;
+  }
+
+  /* Hide scrollbar for feed */
+  .feed-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .feed-scroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }

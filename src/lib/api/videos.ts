@@ -20,7 +20,6 @@ export interface VideoWithProfile extends Video {
 
 /**
  * Fetch videos for the feed (client-side)
- * TODO: Implement actual query logic once database schema is ready
  */
 export async function fetchVideos(
   options: FetchVideosOptions = {}
@@ -37,7 +36,12 @@ export async function fetchVideos(
 
   let query = supabase
     .from("videos")
-    .select("*")
+    .select(
+      `
+      *,
+      profile:profiles(*)
+    `
+    )
     .order(orderBy, { ascending: order === "asc" })
     .range(offset, offset + limit - 1);
 
@@ -52,7 +56,47 @@ export async function fetchVideos(
     throw error;
   }
 
-  // TODO: Join with profiles table once relationships are defined in schema
+  return (data || []) as VideoWithProfile[];
+}
+
+/**
+ * Fetch videos for the feed (server-side)
+ */
+export async function fetchVideosServer(
+  options: FetchVideosOptions = {}
+): Promise<VideoWithProfile[]> {
+  const {
+    limit = 10,
+    offset = 0,
+    userId,
+    orderBy = "created_at",
+    order = "desc",
+  } = options;
+
+  const supabase = await createServerClient();
+
+  let query = supabase
+    .from("videos")
+    .select(
+      `
+      *,
+      profile:profiles(*)
+    `
+    )
+    .order(orderBy, { ascending: order === "asc" })
+    .range(offset, offset + limit - 1);
+
+  if (userId) {
+    query = query.eq("user_id", userId);
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error("Error fetching videos:", error);
+    throw error;
+  }
+
   return (data || []) as VideoWithProfile[];
 }
 
