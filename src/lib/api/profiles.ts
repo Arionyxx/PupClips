@@ -81,7 +81,7 @@ export async function updateProfile(
 export async function createProfile(profile: {
   id: string;
   username: string;
-  display_name?: string;
+  display_name: string;
   avatar_url?: string;
   bio?: string;
 }): Promise<Profile> {
@@ -89,7 +89,7 @@ export async function createProfile(profile: {
 
   const { data, error } = await supabase
     .from("profiles")
-    .insert(profile as any)
+    .insert(profile)
     .select()
     .single();
 
@@ -98,5 +98,5 @@ export async function createProfile(profile: {
     throw error;
   }
 
-  return data as unknown as Profile;
+  return data;
 }

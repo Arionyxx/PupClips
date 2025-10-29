@@ -26,7 +26,7 @@ export function useIntersectionObserver<T extends Element>({
       (entries) => {
         const entry = entries[0];
         setIsIntersecting(entry.isIntersecting);
-        
+
         if (entry.isIntersecting && onIntersect) {
           onIntersect(entry);
         }

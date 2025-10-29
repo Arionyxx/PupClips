@@ -25,7 +25,7 @@ export function FeedContainer({ initialVideos }: FeedContainerProps) {
       }
 
       const data = await response.json();
-      
+
       if (data.videos && data.videos.length > 0) {
         addVideos(data.videos);
         setHasMore(data.hasMore);
@@ -38,5 +38,7 @@ export function FeedContainer({ initialVideos }: FeedContainerProps) {
     }
   }, [videos.length, initialVideos.length, addVideos, setHasMore]);
 
-  return <VideoFeed initialVideos={initialVideos} onLoadMore={handleLoadMore} />;
+  return (
+    <VideoFeed initialVideos={initialVideos} onLoadMore={handleLoadMore} />
+  );
 }

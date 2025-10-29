@@ -155,7 +155,7 @@ supabase/
 
 - ✅ Next.js 14 App Router setup with TypeScript
 - ✅ Tailwind CSS v4 with custom design tokens for vertical video UI
-- ✅ Shadcn UI components (Button, Input, Textarea, Avatar, Dialog, Sheet, Skeleton, Sonner, DropdownMenu, ScrollArea)
+- ✅ Shadcn UI components (Button, Input, Textarea, Avatar, Dialog, Sheet, Skeleton, Sonner, DropdownMenu, ScrollArea, Progress, Card)
 - ✅ Global Providers component with Toaster and Supabase
 - ✅ Route structure: `/` (feed), `/upload`, `/auth`
 - ✅ Custom fonts (Inter)
@@ -165,6 +165,9 @@ supabase/
 - ✅ Row Level Security (RLS) policies
 - ✅ TypeScript database types
 - ✅ Automated aggregate count triggers
+- ✅ Video upload workflow with validation and progress feedback
+- ✅ Automatic poster frame generation
+- ✅ Supabase Storage integration
 
 ## Custom Vertical Video Utilities
 
@@ -270,13 +273,20 @@ const channel = createRealtimeSubscription({
 unsubscribeRealtimeChannel(channel);
 ```
 
+## Documentation
+
+- [Upload Workflow](./UPLOAD_WORKFLOW.md) - Complete guide to video upload implementation
+- [Supabase Setup](./supabase/README.md) - Database schema and storage configuration
+- [Feed Implementation](./FEED_IMPLEMENTATION.md) - Video feed details
+- [Manual Auth Tests](./MANUAL_AUTH_TESTS.md) - Authentication testing guide
+
 ## Next Steps
 
-- Implement Supabase authentication hooks
-- Build video upload functionality with Supabase Storage
-- Create the video feed with vertical scroll
-- Add user profile pages and interactions
-- Implement video playback with controls
+- Enhance video feed with vertical scroll
+- Add user profile pages
+- Implement video playback controls
+- Add social interactions (likes, comments)
+- Implement video analytics
 
 ## Contributing
 

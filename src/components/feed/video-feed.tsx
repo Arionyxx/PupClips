@@ -103,7 +103,7 @@ export function VideoFeed({
     onArrowUp: handlePrevious,
   });
 
-  const { ref: sentinelRef } = useIntersectionObserver({
+  const { ref: sentinelRef } = useIntersectionObserver<HTMLDivElement>({
     threshold: 0.1,
     onIntersect: () => {
       if (hasMore && !isLoading) {
@@ -121,7 +121,11 @@ export function VideoFeed({
       const videoHeight = container.clientHeight;
       const newIndex = Math.round(scrollPosition / videoHeight);
 
-      if (newIndex !== currentIndex && newIndex >= 0 && newIndex < videos.length) {
+      if (
+        newIndex !== currentIndex &&
+        newIndex >= 0 &&
+        newIndex < videos.length
+      ) {
         setCurrentIndex(newIndex);
       }
     };
@@ -131,7 +135,7 @@ export function VideoFeed({
       container.addEventListener("scroll", handleScroll, { passive: true });
       return () => container.removeEventListener("scroll", handleScroll);
     }
-  }, [currentIndex, videos.length, setCurrentIndex]);
+  }, [currentIndex, videos.length, setCurrentIndex, containerRef]);
 
   if (videos.length === 0 && !isLoading) {
     return (

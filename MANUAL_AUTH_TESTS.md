@@ -13,6 +13,7 @@ This document outlines the manual testing steps to verify the authentication flo
 ### 1. Sign Up Flow
 
 **Steps:**
+
 1. Navigate to `/auth`
 2. Click on the "Sign Up" tab
 3. Enter a valid email address (e.g., `test@example.com`)
@@ -22,6 +23,7 @@ This document outlines the manual testing steps to verify the authentication flo
 7. Click "Sign Up"
 
 **Expected Results:**
+
 - ✅ Loading indicator appears on the button
 - ✅ If successful, user is redirected to the home page (`/`)
 - ✅ Header shows user avatar/dropdown instead of "Log in" button
@@ -30,6 +32,7 @@ This document outlines the manual testing steps to verify the authentication flo
 - ✅ Session persists across page refresh
 
 **Error Cases to Test:**
+
 - Password less than 6 characters → Error toast
 - Passwords don't match → Error toast
 - Email already exists → Supabase error toast
@@ -40,6 +43,7 @@ This document outlines the manual testing steps to verify the authentication flo
 ### 2. Sign In Flow
 
 **Steps:**
+
 1. Navigate to `/auth` (or click "Log in" in header)
 2. Ensure "Sign In" tab is active
 3. Enter existing user email
@@ -47,6 +51,7 @@ This document outlines the manual testing steps to verify the authentication flo
 5. Click "Sign In"
 
 **Expected Results:**
+
 - ✅ Loading indicator appears on the button
 - ✅ If successful, user is redirected to home page
 - ✅ Header shows authenticated state (avatar dropdown)
@@ -54,6 +59,7 @@ This document outlines the manual testing steps to verify the authentication flo
 - ✅ If error occurs, toast notification displays error
 
 **Error Cases to Test:**
+
 - Wrong password → "Invalid login credentials" toast
 - Non-existent email → "Invalid login credentials" toast
 - Empty fields → "Please fill in all fields" toast
@@ -63,12 +69,14 @@ This document outlines the manual testing steps to verify the authentication flo
 ### 3. Protected Routes
 
 **Steps:**
+
 1. While signed out, try to access `/upload`
 2. Middleware should redirect to `/auth`
 3. Sign in
 4. Try to access `/upload` again
 
 **Expected Results:**
+
 - ✅ Unauthenticated users are redirected to `/auth`
 - ✅ Authenticated users can access `/upload`
 - ✅ Redirect preserves intended destination (optional enhancement)
@@ -78,12 +86,14 @@ This document outlines the manual testing steps to verify the authentication flo
 ### 4. Sign Out Flow
 
 **Steps:**
+
 1. Sign in if not already authenticated
 2. Click on the user avatar in the header
 3. Dropdown menu appears
 4. Click "Sign Out"
 
 **Expected Results:**
+
 - ✅ Loading indicator appears briefly
 - ✅ User is redirected to home page
 - ✅ Header shows "Log in" button instead of avatar
@@ -98,10 +108,12 @@ This document outlines the manual testing steps to verify the authentication flo
 **Scenarios to Test:**
 
 **When Signed Out:**
+
 - ✅ Header shows "Log in" button
 - ✅ Clicking "Log in" navigates to `/auth`
 
 **When Signed In:**
+
 - ✅ Header shows user avatar
 - ✅ Avatar displays user initials as fallback
 - ✅ Avatar displays profile image if available
@@ -117,10 +129,12 @@ This document outlines the manual testing steps to verify the authentication flo
 ### 6. Profile Bootstrap
 
 **Steps:**
+
 1. Create a new account (sign up)
 2. Check Supabase dashboard → `profiles` table
 
 **Expected Results:**
+
 - ✅ Profile row exists with the new user's ID
 - ✅ `username` is set (from custom input or derived from email)
 - ✅ `display_name` is set (same as username initially)
@@ -128,6 +142,7 @@ This document outlines the manual testing steps to verify the authentication flo
 - ✅ `avatar_url` and `bio` are initially null
 
 **Test with handle_new_user() trigger:**
+
 - The trigger should auto-create the profile
 - Manual fallback in server action ensures profile exists
 
@@ -136,12 +151,14 @@ This document outlines the manual testing steps to verify the authentication flo
 ### 7. Session Persistence
 
 **Steps:**
+
 1. Sign in
 2. Refresh the page multiple times
 3. Close browser tab and reopen
 4. Close browser completely and reopen
 
 **Expected Results:**
+
 - ✅ User remains signed in across all scenarios
 - ✅ Header consistently shows authenticated state
 - ✅ Protected routes remain accessible
@@ -151,6 +168,7 @@ This document outlines the manual testing steps to verify the authentication flo
 ### 8. Loading States
 
 **Components to Check:**
+
 - ✅ Sign In button shows spinner during submission
 - ✅ Sign Up button shows spinner during submission
 - ✅ Sign Out button shows spinner during action
@@ -162,6 +180,7 @@ This document outlines the manual testing steps to verify the authentication flo
 ### 9. Error Handling
 
 **Test Various Error Scenarios:**
+
 - ✅ Network errors → Appropriate error toast
 - ✅ Supabase service errors → Error toast with message
 - ✅ Invalid credentials → Clear error message
@@ -173,6 +192,7 @@ This document outlines the manual testing steps to verify the authentication flo
 ### 10. UI/UX Checks
 
 **Visual Inspection:**
+
 - ✅ Tabbed interface switches smoothly between Sign In/Sign Up
 - ✅ Forms are styled consistently with Shadcn UI theme
 - ✅ Loading states are clear and user-friendly

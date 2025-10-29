@@ -46,3 +46,12 @@ export { Skeleton } from "./skeleton";
 export { Toaster } from "./sonner";
 export { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
 export { Textarea } from "./textarea";
+export { Progress } from "./progress";
+export {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "./card";
