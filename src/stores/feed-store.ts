@@ -62,7 +62,8 @@ export const useFeedStore = create<FeedState>((set, get) => ({
       set({ currentIndex: currentIndex - 1 });
     }
   },
-  toggleAutoplay: () => set((state) => ({ isAutoplayEnabled: !state.isAutoplayEnabled })),
+  toggleAutoplay: () =>
+    set((state) => ({ isAutoplayEnabled: !state.isAutoplayEnabled })),
   toggleMute: () => set((state) => ({ isMuted: !state.isMuted })),
   setLoading: (isLoading) => set({ isLoading }),
   setHasMore: (hasMore) => set({ hasMore }),

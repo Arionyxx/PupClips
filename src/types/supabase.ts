@@ -9,138 +9,185 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      videos: {
+      profiles: {
         Row: {
           id: string;
+          username: string;
+          display_name: string;
+          avatar_url: string | null;
+          bio: string | null;
           created_at: string;
           updated_at: string;
-          user_id: string;
-          title: string;
-          description: string | null;
-          video_url: string;
-          thumbnail_url: string | null;
-          duration: number;
-          views_count: number;
-          likes_count: number;
-          comments_count: number;
         };
         Insert: {
-          id?: string;
+          id: string;
+          username: string;
+          display_name: string;
+          avatar_url?: string | null;
+          bio?: string | null;
           created_at?: string;
           updated_at?: string;
-          user_id: string;
-          title: string;
-          description?: string | null;
-          video_url: string;
-          thumbnail_url?: string | null;
-          duration: number;
-          views_count?: number;
-          likes_count?: number;
-          comments_count?: number;
         };
         Update: {
           id?: string;
+          username?: string;
+          display_name?: string;
+          avatar_url?: string | null;
+          bio?: string | null;
           created_at?: string;
           updated_at?: string;
-          user_id?: string;
-          title?: string;
-          description?: string | null;
-          video_url?: string;
-          thumbnail_url?: string | null;
-          duration?: number;
-          views_count?: number;
-          likes_count?: number;
-          comments_count?: number;
         };
         Relationships: [];
+      };
+      videos: {
+        Row: {
+          id: string;
+          user_id: string;
+          storage_path: string;
+          poster_url: string | null;
+          caption: string | null;
+          duration_seconds: number | null;
+          like_count: number;
+          comment_count: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          storage_path: string;
+          poster_url?: string | null;
+          caption?: string | null;
+          duration_seconds?: number | null;
+          like_count?: number;
+          comment_count?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          storage_path?: string;
+          poster_url?: string | null;
+          caption?: string | null;
+          duration_seconds?: number | null;
+          like_count?: number;
+          comment_count?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "videos_user_id_fkey";
+            columns: ["user_id"];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       likes: {
         Row: {
           id: string;
-          created_at: string;
-          user_id: string;
           video_id: string;
+          user_id: string;
+          created_at: string;
         };
         Insert: {
           id?: string;
-          created_at?: string;
-          user_id: string;
           video_id: string;
+          user_id: string;
+          created_at?: string;
         };
         Update: {
           id?: string;
-          created_at?: string;
-          user_id?: string;
           video_id?: string;
+          user_id?: string;
+          created_at?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "likes_video_id_fkey";
+            columns: ["video_id"];
+            referencedRelation: "videos";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "likes_user_id_fkey";
+            columns: ["user_id"];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       comments: {
         Row: {
           id: string;
+          video_id: string;
+          user_id: string;
+          content: string;
           created_at: string;
           updated_at: string;
-          user_id: string;
-          video_id: string;
-          content: string;
-          parent_id: string | null;
         };
         Insert: {
           id?: string;
+          video_id: string;
+          user_id: string;
+          content: string;
           created_at?: string;
           updated_at?: string;
-          user_id: string;
-          video_id: string;
-          content: string;
-          parent_id?: string | null;
         };
         Update: {
           id?: string;
-          created_at?: string;
-          updated_at?: string;
-          user_id?: string;
           video_id?: string;
+          user_id?: string;
           content?: string;
-          parent_id?: string | null;
-        };
-        Relationships: [];
-      };
-      profiles: {
-        Row: {
-          id: string;
-          created_at: string;
-          updated_at: string;
-          username: string;
-          full_name: string | null;
-          avatar_url: string | null;
-          bio: string | null;
-        };
-        Insert: {
-          id: string;
           created_at?: string;
           updated_at?: string;
-          username: string;
-          full_name?: string | null;
-          avatar_url?: string | null;
-          bio?: string | null;
         };
-        Update: {
-          id?: string;
-          created_at?: string;
-          updated_at?: string;
-          username?: string;
-          full_name?: string | null;
-          avatar_url?: string | null;
-          bio?: string | null;
-        };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "comments_video_id_fkey";
+            columns: ["video_id"];
+            referencedRelation: "videos";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "comments_user_id_fkey";
+            columns: ["user_id"];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
       };
     };
     Views: {
-      [_ in never]: never;
+      videos_with_profiles: {
+        Row: {
+          id: string;
+          user_id: string;
+          storage_path: string;
+          poster_url: string | null;
+          caption: string | null;
+          duration_seconds: number | null;
+          like_count: number;
+          comment_count: number;
+          created_at: string;
+          updated_at: string;
+          username: string;
+          display_name: string;
+          user_avatar_url: string | null;
+        };
+        Relationships: [];
+      };
     };
     Functions: {
-      [_ in never]: never;
+      has_user_liked_video: {
+        Args: {
+          video_uuid: string;
+          user_uuid: string;
+        };
+        Returns: boolean;
+      };
     };
     Enums: {
       [_ in never]: never;
@@ -159,5 +206,6 @@ export type Inserts<T extends keyof Database["public"]["Tables"]> =
 export type Updates<T extends keyof Database["public"]["Tables"]> =
   Database["public"]["Tables"][T]["Update"];
 
-// TODO: Generate this file from your Supabase schema using:
-// npx supabase gen types typescript --project-id your-project-id > src/types/supabase.ts
+// Note: This file should be kept in sync with database.ts
+// To regenerate from your Supabase schema:
+// npx supabase gen types typescript --local > src/types/supabase.ts

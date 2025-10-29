@@ -25,14 +25,14 @@ export function useDoubleTap({
         clearTimeout(timeoutRef.current);
         timeoutRef.current = null;
       }
-      
+
       if (onDoubleTap) {
         onDoubleTap();
       }
       lastTapRef.current = 0;
     } else {
       lastTapRef.current = now;
-      
+
       if (onSingleTap) {
         timeoutRef.current = setTimeout(() => {
           onSingleTap();

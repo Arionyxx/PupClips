@@ -6,7 +6,7 @@ export function VideoSkeleton() {
   return (
     <div className="relative h-full w-full bg-gray-900">
       <Skeleton className="h-full w-full" />
-      
+
       <div className="absolute inset-x-0 bottom-20 flex items-end justify-between p-4">
         <div className="flex max-w-[70%] flex-col gap-2">
           <div className="flex items-center gap-2">

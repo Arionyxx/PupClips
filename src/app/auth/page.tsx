@@ -156,7 +156,8 @@ export default function AuthPage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="signup-username">
-                  Username <span className="text-muted-foreground">(optional)</span>
+                  Username{" "}
+                  <span className="text-muted-foreground">(optional)</span>
                 </Label>
                 <Input
                   id="signup-username"

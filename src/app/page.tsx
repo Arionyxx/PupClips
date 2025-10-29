@@ -21,7 +21,8 @@ export default async function FeedPage() {
             Your favorite short-form vertical video platform for dogs.
           </p>
           <p className="text-muted-foreground text-sm">
-            No videos available yet. Sign in and start uploading amazing dog videos!
+            No videos available yet. Sign in and start uploading amazing dog
+            videos!
           </p>
         </div>
       </main>

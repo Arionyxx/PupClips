@@ -37,7 +37,7 @@ export const VideoPlayer = forwardRef<HTMLVideoElement, VideoPlayerProps>(
     const [showControls, setShowControls] = useState(false);
     const [progress, setProgress] = useState(0);
     const [showPlayIcon, setShowPlayIcon] = useState(false);
-    const controlsTimeoutRef = useRef<NodeJS.Timeout>();
+    const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
       if (ref && typeof ref === "function") {
@@ -61,6 +61,8 @@ export const VideoPlayer = forwardRef<HTMLVideoElement, VideoPlayerProps>(
           });
       } else {
         video.pause();
+        // Synchronize React state with video element state
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsPlaying(false);
       }
     }, [isActive, autoplay]);
@@ -123,7 +125,7 @@ export const VideoPlayer = forwardRef<HTMLVideoElement, VideoPlayerProps>(
 
     const handleMouseMove = () => {
       setShowControls(true);
-      
+
       if (controlsTimeoutRef.current) {
         clearTimeout(controlsTimeoutRef.current);
       }

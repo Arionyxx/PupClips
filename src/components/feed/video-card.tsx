@@ -47,7 +47,7 @@ export function VideoCard({
       setLocalLikeCount((prev) => prev + 1);
       setIsLikeAnimating(true);
       onLike?.(video.id);
-      
+
       setTimeout(() => {
         setIsLikeAnimating(false);
       }, 1000);
@@ -109,7 +109,7 @@ export function VideoCard({
           </div>
 
           {video.caption && (
-            <p className="text-sm text-white line-clamp-3">{video.caption}</p>
+            <p className="line-clamp-3 text-sm text-white">{video.caption}</p>
           )}
         </div>
 

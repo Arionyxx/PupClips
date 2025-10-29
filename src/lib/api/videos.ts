@@ -133,7 +133,7 @@ export async function createVideo(video: VideoInsert): Promise<Video> {
 
   const { data, error } = await supabase
     .from("videos")
-    .insert(video as any)
+    .insert(video)
     .select()
     .single();
 
@@ -142,7 +142,7 @@ export async function createVideo(video: VideoInsert): Promise<Video> {
     throw error;
   }
 
-  return data as unknown as Video;
+  return data;
 }
 
 /**
@@ -157,7 +157,7 @@ export async function updateVideo(
 
   const { data, error } = await supabase
     .from("videos")
-    .update(updates as any)
+    .update(updates)
     .eq("id", id)
     .select()
     .single();
@@ -167,7 +167,7 @@ export async function updateVideo(
     throw error;
   }
 
-  return data as unknown as Video;
+  return data;
 }
 
 /**

@@ -2,11 +2,7 @@
 
 import Link from "next/link";
 import { useAuth } from "@/hooks/use-auth";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -61,7 +57,9 @@ export function Header() {
                     <Avatar className="h-10 w-10">
                       <AvatarImage
                         src={profile?.avatar_url || undefined}
-                        alt={profile?.display_name || profile?.username || "User"}
+                        alt={
+                          profile?.display_name || profile?.username || "User"
+                        }
                       />
                       <AvatarFallback>
                         {getInitials(
@@ -76,7 +74,7 @@ export function Header() {
                 <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuLabel>
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">
+                      <p className="text-sm leading-none font-medium">
                         {profile?.display_name || profile?.username || "User"}
                       </p>
                       <p className="text-muted-foreground text-xs leading-none">
@@ -99,7 +97,10 @@ export function Header() {
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <SignOutButton variant="ghost" className="w-full justify-start" />
+                    <SignOutButton
+                      variant="ghost"
+                      className="w-full justify-start"
+                    />
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
